@@ -52,7 +52,7 @@ The rio package works for importing several different types of data files. We're
 # Using the file.choose() command allows you to select a file to import from another folder.
 dataset <- rio::import(file.choose())
 # This command will allow us to import a file included in our project folder.
-# dataset <- rio::import("Album Sales.sav")
+# dataset <- rio::import("Puppy love".sav")
 ```
 
 ## Get R code from Jamovi output
@@ -63,6 +63,24 @@ You can get the R code for most of the analyses you do in Jamovi.
 2. Click on the Syndax mode check box at the bottom of the Results section.
 3. Close the Settings window by clicking on the Hide Settings arrow at the top right of the settings menu.
 4. you should now see the R code for each of the analyses you just ran.
+
+```{r eval=FALSE}
+jmv::ancova(
+    formula = Happiness ~ Puppy_love + Dose + Dose:Puppy_love,
+    data = dataset,
+    effectSize = "omega",
+    homo = TRUE,
+    norm = TRUE,
+    qq = TRUE,
+    contrasts = list(
+        list(
+            var="Dose",
+            type="simple")),
+    postHoc = ~ Dose,
+    postHocCorr = "bonf",
+    emMeans = ~ Dose,
+    emmTables = TRUE)
+```
 
 ## lm() function in R
 
@@ -132,7 +150,7 @@ You can compare the values we get from lm() with the results for the second mode
 
 Compare the output from the lm() function with the output from the function in the jmv package.
 
-```{r}
+```{r eval=FALSE}
 jmv::ancova(
     formula = Happiness ~ Dose + Puppy_love,
     data = dataset,
@@ -150,6 +168,8 @@ jmv::ancova(
 ```
 
 I don't get any numbers in the tables when I try the jmv::ancova() function in RStudio.But, no errors reported. Seems to work just fine with jmv::ANOVA(). I submitted an issue report. https://github.com/jamovi/jamovi/issues/1006
+
+Anne: There is an error message but I cannot track it back: Error in rep.int(c(1, numeric(n)), n - 1L) : invalid 'times' value
 
 ```{r}
 jmv::ANOVA(
